@@ -1,7 +1,6 @@
 package tictactoe.player;
 
 import tictactoe.Position;
-import tictactoe.TicTacToe;
 
 
 public class Player {

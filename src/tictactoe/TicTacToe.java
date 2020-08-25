@@ -3,13 +3,28 @@ package tictactoe;
 import tictactoe.player.AIPlayer;
 import tictactoe.player.HumanPlayer;
 import tictactoe.player.Player;
+import tictactoe.player.ProfessionalAIPlayer;
 
 import java.util.Scanner;
 
 public class TicTacToe implements Simulatable, Printable, Winnable {
-    public static int[][] board = new int[3][3];
+
+    public int count = 0;
+    private static TicTacToe ticTacToe = null;
+
+    private TicTacToe() {
+    }
+
+    public static TicTacToe getInstance() {
+        if (ticTacToe == null) {
+            ticTacToe = new TicTacToe();
+        }
+        return ticTacToe;
+    }
+
+    public int[][] board = new int[3][3];
     int tieNum = 0;
-    int count = 0;
+    //    int count = 0;
     int n = 0;
     Scanner sc = new Scanner(System.in);
     String p1, p2;
@@ -18,29 +33,36 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
 
     public void play() {
         if (count % 2 == 0) {
-            TicTacToe.board[Player.pos.getX()][Player.pos.getY()] = 1;
+            ticTacToe.board[Player.pos.getX()][Player.pos.getY()] = 1;
         } else {
-            TicTacToe.board[Player.pos.getX()][Player.pos.getY()] = 2;
+            ticTacToe.board[Player.pos.getX()][Player.pos.getY()] = 2;
         }
-        this.printStatus();
+        printStatus();
+    }
+
+    public void run() {
+        input();
+        printStatus();
     }
 
     @Override
     public void printStatus() {
-        for (int[] column : board) {
-            for (int row : column) {
-                if (row == 1) {
+        System.out.println("  1 2 3");
+        for (int i = 0; i < board.length; i++) {
+            System.out.print(i + 1 + " ");
+            for (int j = 0; j < board[i].length; j++) {
+                if (board[i][j] == 1) {
                     System.out.print("O ");
-                } else if (row == 2) {
+                } else if (board[i][j] == 2) {
                     System.out.print("X ");
                 } else {
-                    System.out.print(". ");
+                    System.out.print("- ");
                 }
             }
             System.out.println();
         }
         System.out.println();
-        this.isFinished();
+        isFinished();
     }
 
     @Override
@@ -61,6 +83,10 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player1 = new AIPlayer();
                 player1.setName("player1(AI)");
                 break;
+            } else if (p1.equals("pro")) {
+                player1 = new ProfessionalAIPlayer();
+                player1.setName("player1(ProAI)");
+                break;
             } else {
                 System.out.println("다시 입력하세요.");
             }
@@ -76,29 +102,31 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player2 = new AIPlayer();
                 player2.setName("player2(AI)");
                 break;
+            } else if (p2.equals("pro")) {
+                player2 = new ProfessionalAIPlayer();
+                player2.setName("player2(ProAI)");
+                break;
             } else {
                 System.out.println("다시 입력하세요.");
             }
         }
         System.out.println();
-        this.input();
-        this.printStatus();
     }
 
     @Override
     public void isFinished() {
         if (count % 2 == 0) {
             allCheck(player1, 3);
-        } else if (count % 2 == 1){
+        } else if (count % 2 == 1) {
             allCheck(player2, 3);
         }
         if (count == 8) {
             System.out.println("무승부 !");
             tieNum++;
-            this.reStart();
+            reStart();
         }
         count++;
-        this.input();
+        input();
     }
 
     public void input() {
@@ -109,14 +137,14 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
             player2.getKeyboardInput();
             System.out.println(player2.getName() + " 착수");
         }
-        this.play();
+        play();
     }
 
     public void allCheck(Player player, int win) {
-        vertical(player, win);
-        horizontal(player, win);
-        diagonal(player, win);
-        skewDiagonal(player, win);
+        verticalCheck(player, win);
+        horizontalCheck(player, win);
+        diagonalCheck(player, win);
+        skewDiagonalCheck(player, win);
     }
 
     @Override
@@ -124,9 +152,9 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         System.out.println(player1.getName() + " " + player1.numWin + " vs " + player2.numWin + " " + player2.getName() + " 무승부 : " + tieNum);
         System.out.println();
         count = 0;
-        this.end();
+        end();
         board = new int[3][3];
-        this.input();
+        input();
     }
 
     @Override
@@ -139,12 +167,12 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
     }
 
     @Override
-    public void vertical(Player player, int win) {
+    public void verticalCheck(Player player, int win) {
         player.lineNum = 1;
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() + i + 1 >= win)
                 break;
-            if (TicTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY()] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY()] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -152,7 +180,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() - i - 1 < 0)
                 break;
-            if (TicTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY()] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY()] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -160,17 +188,17 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         if (player.lineNum == win) {
             player.numWin += 1;
             System.out.println(player.getName() + " : 승리 !");
-            this.reStart();
+            reStart();
         }
     }
 
     @Override
-    public void horizontal(Player player, int win) {
+    public void horizontalCheck(Player player, int win) {
         player.lineNum = 1;
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getY() + i + 1 >= win)
                 break;
-            if (TicTacToe.board[Player.pos.getX()][Player.pos.getY() + i + 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX()][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -178,7 +206,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getY() - i - 1 < 0)
                 break;
-            if (TicTacToe.board[Player.pos.getX()][Player.pos.getY() - i - 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX()][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -186,17 +214,17 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         if (player.lineNum == win) {
             player.numWin += 1;
             System.out.println(player.getName() + " : 승리 !");
-            this.reStart();
+            reStart();
         }
     }
 
     @Override
-    public void diagonal(Player player, int win) {
+    public void diagonalCheck(Player player, int win) {
         player.lineNum = 1;
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() + i + 1 >= win || Player.pos.getY() + i + 1 >= win)
                 break;
-            if (TicTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() + i + 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -204,7 +232,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() - i - 1 < 0 || Player.pos.getY() - i - 1 < 0)
                 break;
-            if (TicTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() - i - 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -212,17 +240,17 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         if (player.lineNum == win) {
             player.numWin += 1;
             System.out.println(player.getName() + " : 승리 !");
-            this.reStart();
+            reStart();
         }
     }
 
     @Override
-    public void skewDiagonal(Player player, int win) {
+    public void skewDiagonalCheck(Player player, int win) {
         player.lineNum = 1;
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() - i - 1 < 0 || Player.pos.getY() + i + 1 >= win)
                 break;
-            if (TicTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() + i + 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -230,7 +258,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         for (int i = 0; i < win - 1; i++) {
             if (Player.pos.getX() + i + 1 >= win || Player.pos.getY() - i - 1 < 0)
                 break;
-            if (TicTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() - i - 1] == TicTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
                 player.lineNum++;
             } else
                 break;
@@ -238,7 +266,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         if (player.lineNum == win) {
             player.numWin += 1;
             System.out.println(player.getName() + " : 승리 !");
-            this.reStart();
+            reStart();
         }
     }
 }
