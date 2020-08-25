@@ -2,7 +2,7 @@ package tictactoe.player;
 
 import tictactoe.TicTacToe;
 
-public class AIPlayer extends Player {
+public class RandomAIPlayer extends Player {
 
     public void getKeyboardInput() {
         TicTacToe ticTacToe = TicTacToe.getInstance();

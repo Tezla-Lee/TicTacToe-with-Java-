@@ -11,6 +11,5 @@ public class ProfessionalAIPlayer extends Player{
         } else if (ticTacToe.count == 1) {
 
         }
-
     }
 }

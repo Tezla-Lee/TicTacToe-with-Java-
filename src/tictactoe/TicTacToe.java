@@ -1,6 +1,6 @@
 package tictactoe;
 
-import tictactoe.player.AIPlayer;
+import tictactoe.player.RandomAIPlayer;
 import tictactoe.player.HumanPlayer;
 import tictactoe.player.Player;
 import tictactoe.player.ProfessionalAIPlayer;
@@ -80,7 +80,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player1.setName("player1(Human)");
                 break;
             } else if (p1.equals("ai")) {
-                player1 = new AIPlayer();
+                player1 = new RandomAIPlayer();
                 player1.setName("player1(AI)");
                 break;
             } else if (p1.equals("pro")) {
@@ -99,7 +99,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player2.setName("player2(Human)");
                 break;
             } else if (p2.equals("ai")) {
-                player2 = new AIPlayer();
+                player2 = new RandomAIPlayer();
                 player2.setName("player2(AI)");
                 break;
             } else if (p2.equals("pro")) {
