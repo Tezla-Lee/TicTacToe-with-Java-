@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>tictactoe</OriginalElement>
+  <nodes>
+    <node x="172.0" y="22.0">tictactoe.Printable</node>
+    <node x="162.5" y="170.0">tictactoe.TicTacToe</node>
+    <node x="0.0" y="821.0">tictactoe.Main</node>
+    <node x="448.0" y="0.0">tictactoe.Winnable</node>
+    <node x="212.0" y="821.0">tictactoe.player</node>
+    <node x="768.0" y="0.0">tictactoe.Position</node>
+    <node x="0.0" y="0.0">tictactoe.Simulatable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="tictactoe.TicTacToe" target="tictactoe.Printable">
+      <point x="0.0" y="-303.0" />
+      <point x="0.0" y="38.0" />
+    </edge>
+    <edge source="tictactoe.TicTacToe" target="tictactoe.Winnable">
+      <point x="91.66666666666663" y="-303.0" />
+      <point x="391.66666666666663" y="145.0" />
+      <point x="585.5" y="145.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+    <edge source="tictactoe.TicTacToe" target="tictactoe.Simulatable">
+      <point x="-91.66666666666669" y="-303.0" />
+      <point x="208.33333333333331" y="145.0" />
+      <point x="76.0" y="145.0" />
+      <point x="0.0" y="60.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0" x="459.50000000000006" y="427.50000000000006" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+    <Category>Inner Classes</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

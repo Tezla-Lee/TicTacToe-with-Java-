@@ -3,8 +3,10 @@ package tictactoe;
 import tictactoe.player.RandomAIPlayer;
 import tictactoe.player.HumanPlayer;
 import tictactoe.player.Player;
-import tictactoe.player.ProfessionalAIPlayer;
+import tictactoe.player.AdvancedAIPlayer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class TicTacToe implements Simulatable, Printable, Winnable {
@@ -24,7 +26,6 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
 
     public int[][] board = new int[3][3];
     int tieNum = 0;
-    //    int count = 0;
     int n = 0;
     Scanner sc = new Scanner(System.in);
     String p1, p2;
@@ -56,7 +57,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 } else if (board[i][j] == 2) {
                     System.out.print("X ");
                 } else {
-                    System.out.print("- ");
+                    System.out.print("□ ");
                 }
             }
             System.out.println();
@@ -66,11 +67,24 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
     }
 
     @Override
+    public List<Position> availablePosition() {
+        List<Position> availablePosition = new ArrayList<>();
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == 0) {
+                    availablePosition.add(new Position(i, j));
+                }
+            }
+        }
+        return availablePosition;
+    }
+
+    @Override
     public void initialize() {
         System.out.print("n선 승제, n 입력: ");
         n = sc.nextInt();
         sc.nextLine();
-        System.out.println("사람은 h, AI는 ai를 입력하세요.");
+        System.out.println("사람은 h, 랜덤봇은 r, AI는 ai를 입력하세요.");
 
         while (true) {
             System.out.print("Player 1: ");
@@ -79,13 +93,13 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player1 = new HumanPlayer();
                 player1.setName("player1(Human)");
                 break;
-            } else if (p1.equals("ai")) {
+            } else if (p1.equals("r")) {
                 player1 = new RandomAIPlayer();
-                player1.setName("player1(AI)");
+                player1.setName("player1(RandomBot)");
                 break;
-            } else if (p1.equals("pro")) {
-                player1 = new ProfessionalAIPlayer();
-                player1.setName("player1(ProAI)");
+            } else if (p1.equals("ai")) {
+                player1 = new AdvancedAIPlayer();
+                player1.setName("player1(AI)");
                 break;
             } else {
                 System.out.println("다시 입력하세요.");
@@ -98,13 +112,13 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
                 player2 = new HumanPlayer();
                 player2.setName("player2(Human)");
                 break;
-            } else if (p2.equals("ai")) {
+            } else if (p2.equals("r")) {
                 player2 = new RandomAIPlayer();
-                player2.setName("player2(AI)");
+                player2.setName("player2(RandomBot)");
                 break;
-            } else if (p2.equals("pro")) {
-                player2 = new ProfessionalAIPlayer();
-                player2.setName("player2(ProAI)");
+            } else if (p2.equals("ai")) {
+                player2 = new AdvancedAIPlayer();
+                player2.setName("player2(AI)");
                 break;
             } else {
                 System.out.println("다시 입력하세요.");
@@ -269,4 +283,5 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
             reStart();
         }
     }
+
 }
