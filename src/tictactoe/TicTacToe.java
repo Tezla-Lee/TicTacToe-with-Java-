@@ -6,7 +6,6 @@ import tictactoe.player.Player;
 import tictactoe.player.AdvancedAIPlayer;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 public class TicTacToe implements Simulatable, Printable, Winnable {
@@ -29,8 +28,8 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
     int n = 0;
     Scanner sc = new Scanner(System.in);
     String p1, p2;
-    Player player1;
-    Player player2;
+    public Player player1;
+    public Player player2;
 
     public void play() {
         if (count % 2 == 0) {
@@ -53,9 +52,9 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
             System.out.print(i + 1 + " ");
             for (int j = 0; j < board[i].length; j++) {
                 if (board[i][j] == 1) {
-                    System.out.print("O ");
-                } else if (board[i][j] == 2) {
                     System.out.print("X ");
+                } else if (board[i][j] == 2) {
+                    System.out.print("O ");
                 } else {
                     System.out.print("□ ");
                 }
@@ -67,8 +66,8 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
     }
 
     @Override
-    public List<Position> availablePosition() {
-        List<Position> availablePosition = new ArrayList<>();
+    public ArrayList<Position> availablePosition() {
+        ArrayList<Position> availablePosition = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
                 if (board[i][j] == 0) {
@@ -134,7 +133,7 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         } else if (count % 2 == 1) {
             allCheck(player2, 3);
         }
-        if (count == 8) {
+        if (availablePosition().isEmpty()) {
             System.out.println("무승부 !");
             tieNum++;
             reStart();
@@ -161,11 +160,17 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         skewDiagonalCheck(player, win);
     }
 
+    public boolean allCheck2(Player player, int win) {
+        return verticalCheck2(player, win) ||
+                horizontalCheck2(player, win) ||
+                diagonalCheck2(player, win) ||
+                skewDiagonalCheck2(player, win);
+    }
+
     @Override
     public void reStart() {
         System.out.println(player1.getName() + " " + player1.numWin + " vs " + player2.numWin + " " + player2.getName() + " 무승부 : " + tieNum);
         System.out.println();
-        count = 0;
         end();
         board = new int[3][3];
         input();
@@ -284,4 +289,89 @@ public class TicTacToe implements Simulatable, Printable, Winnable {
         }
     }
 
+
+
+    public boolean verticalCheck2(Player player, int win) {
+        player.lineNum = 1;
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() + i + 1 >= win)
+                break;
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY()] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() - i - 1 < 0)
+                break;
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY()] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        return player.lineNum == win;
+    }
+
+    public boolean horizontalCheck2(Player player, int win) {
+        player.lineNum = 1;
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getY() + i + 1 >= win)
+                break;
+            if (ticTacToe.board[Player.pos.getX()][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getY() - i - 1 < 0)
+                break;
+            if (ticTacToe.board[Player.pos.getX()][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        return player.lineNum == win;
+    }
+
+    public boolean diagonalCheck2(Player player, int win) {
+        player.lineNum = 1;
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() + i + 1 >= win || Player.pos.getY() + i + 1 >= win)
+                break;
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() - i - 1 < 0 || Player.pos.getY() - i - 1 < 0)
+                break;
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        return player.lineNum == win;
+    }
+
+    public boolean skewDiagonalCheck2(Player player, int win) {
+        player.lineNum = 1;
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() - i - 1 < 0 || Player.pos.getY() + i + 1 >= win)
+                break;
+            if (ticTacToe.board[Player.pos.getX() - i - 1][Player.pos.getY() + i + 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        for (int i = 0; i < win - 1; i++) {
+            if (Player.pos.getX() + i + 1 >= win || Player.pos.getY() - i - 1 < 0)
+                break;
+            if (ticTacToe.board[Player.pos.getX() + i + 1][Player.pos.getY() - i - 1] == ticTacToe.board[Player.pos.getX()][Player.pos.getY()]) {
+                player.lineNum++;
+            } else
+                break;
+        }
+        return player.lineNum == win;
+    }
 }

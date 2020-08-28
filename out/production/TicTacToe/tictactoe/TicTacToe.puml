@@ -1,0 +1,95 @@
+@startuml
+
+class AdvancedAIPlayer {
+    + void getKeyboardInput()
+    ~ int minimax()
+}
+
+class HumanPlayer {
+    + void getKeyboardInput()
+}
+
+class Player {
+    + static Position pos = new Position()
+    - String name
+    + int lineNum
+    + int numWin
+    + String getName()
+    + void setName(String name)
+    + void getKeyboardInput()
+}
+
+class RandomAIPlayer {
+    + void getKeyboardInput()
+}
+
+class Main {
+    + static void main(String[] args)
+}
+
+class Position {
+    - int x
+    - int y
+    + Position()
+    + Position(int x, int y)
+    + int getX()
+    + void setX(int x)
+    + int getY()
+    + void setY(int y)
+    + String toString()
+}
+
+Interface Printable {
+    {abstract} void printStatus()
+    List<Position> availablePosition()
+}
+
+Interface Simulatable {
+    void initialize()
+    void isFinished()
+    void reStart()
+    void end()
+}
+
+class TicTacToe {
+    + int count
+    - static TicTacToe ticTacToe
+    - TicTacToe()
+    + static TicTacToe getInstance()
+    + int[][] getKeyboardInput
+    ~ int tieNum
+    ~ int n
+    ~ String p1
+    ~ String p2
+    ~ Player player1
+    ~ Player player2
+    + void play()
+    + void run()
+    + void printStatus()
+    + List<Position> availablePosition()
+    + void initialize()
+    + void isFinished()
+    + void input()
+    + void allCheck(Player player, int win)
+    + void reStart()
+    + void end()
+    + void verticalCheck(Player player, int win)
+    + void horizontalCheck(Player player, int win)
+    + void diagonalCheck(Player player, int win)
+    + void skewDiagonalCheck(Player player, int win)
+
+Interface Winnalbe {
+    void verticalCheck(Player player, int win);
+    void horizontalCheck(Player player, int win);
+    void diagonalCheck(Player player, int win);
+    void skewDiagonalCheck(Player player, int win);
+}
+
+HumanPlayer -o Player
+AdvancedAIPlayer -o Player
+RandomAIPlayer -o Player
+TicTacToe -|> Simulatable
+TicTacToe -|> Winnalbe
+TicTacToe -|> Printable
+
+@enduml
